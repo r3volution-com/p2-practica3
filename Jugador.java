@@ -1,8 +1,8 @@
 
 public class Jugador {
-	Coordenada[][] tablero = new Coordenada[9][9];
-	Barco[] naves = new Barco[10];
-	String nombre;
+	private Coordenada[][] tablero = new Coordenada[9][9];
+	private Barco[] naves = new Barco[10];
+	private String nombre;
 	public Jugador(String nombre){
 		if (nombre != null){
 			for (int i = 0; i < tablero.length; i++){
@@ -110,12 +110,32 @@ public class Jugador {
 		}
 		return false;
 	}
-	public boolean esAtacado(Coordenada c) throws CoordenadaNoValidaException, DotacionIncompletaException, CoordenadaOcupadaException {
+	public boolean esAtacado(Coordenada c) throws CoordenadaNoValidaException, DotacionIncompletaException, PartidaPerdidaException {
 		if (c != null){
+			boolean tdshundidos = true;
 			if ((c.getX() >= 1 && c.getX() <= 9) && (c.getY() >= 1 && c.getY() <= 9)){
 				if (naves[naves.length-1] != null){
 					for (int j = 0; j<tablero.length;j++){
 						for (int k = 0; k < tablero[j].length; k++){
+							for (int l=0;l<naves.length;l++){
+								if (naves[l].tocado(j+1, k+1)){ 
+									tdshundidos = true;
+									for (int m=0;m<naves.length;m++){
+										if (naves[m].getEstado().compareToIgnoreCase("hundido")!=0){
+											tdshundidos = false;
+										}
+									}
+									if (tdshundidos == true){
+										throw new PartidaPerdidaException(this.nombre);
+									}
+									return true;
+								}
+								
+								/*if (naves[l].compruebaCoordenada(j+1, k+1)){
+									naves[l].tocado(j+1, k+1);
+									tablero[j][k].cambiaEstado("tocado");
+								}*/
+							}
 							//Como se que barco hay aqui? tocado (int x, int y)
 						}
 					}

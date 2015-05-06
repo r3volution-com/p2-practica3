@@ -1,8 +1,8 @@
 
 public class Barco {
-	Coordenada[] posiciones;
-	String estado;
-	String tipo;
+	private Coordenada[] posiciones;
+	private String estado;
+	private String tipo;
 	public Barco(int nCoord){
 		if (nCoord < 1 || nCoord > 4) nCoord = 1;
 		posiciones = new Coordenada[nCoord];
@@ -51,6 +51,18 @@ public class Barco {
 						if (tocado){
 							this.estado = "hundido";
 						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	public boolean compruebaCoordenada(int x, int y){
+		if ((x >= 0  && x >= 0)&&(x<=9 && y <=9)) {
+			for (int i=0;i<posiciones.length;i++){
+				if (posiciones[i]!=null){
+					if (posiciones[i].getX() == x && posiciones[i].getY() == y){
 						return true;
 					}
 				}
