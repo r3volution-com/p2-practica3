@@ -6,6 +6,7 @@ public class Barco {
 	public Barco(int nCoord){
 		if (nCoord < 1 || nCoord > 4) nCoord = 1;
 		posiciones = new Coordenada[nCoord];
+		//For para iniciar coordenadas?
 		estado = "flotado";
 		switch(nCoord){
 			case 1: 
@@ -26,7 +27,7 @@ public class Barco {
 		}
 	}
 	public boolean setPosicion(Coordenada c, int i){
-		if (c != null && i > 0 && i < posiciones.length && posiciones[i] == null){
+		if (c != null && i >= 0 && i < posiciones.length && posiciones[i] == null){
 			posiciones[i] = c;
 			if (posiciones[i].getEstado().compareToIgnoreCase("ocupado") != 0){
 				//REvisar
@@ -59,7 +60,7 @@ public class Barco {
 		return false;
 	}
 	public boolean compruebaCoordenada(int x, int y){
-		if ((x >= 0  && x >= 0)&&(x<=9 && y <=9)) {
+		if ((x >= 1  && x >= 1)&&(x<=10 && y <=10)) {
 			for (int i=0;i<posiciones.length;i++){
 				if (posiciones[i]!=null){
 					if (posiciones[i].getX() == x && posiciones[i].getY() == y){
