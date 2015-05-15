@@ -5,6 +5,7 @@ public class Jugador {
 	private String nombre;
 	public Jugador(String nombre){
 		if (nombre != null){
+			this.nombre = nombre;
 			for (int i = 0; i < tablero.length; i++){
 				for (int j = 0; j <tablero[i].length;j++){
 					tablero[i][j] = new Coordenada(i+1, j+1);
@@ -145,13 +146,7 @@ public class Jugador {
 								}
 								return true;
 							}
-								
-								/*if (naves[l].compruebaCoordenada(j+1, k+1)){
-									naves[l].tocado(j+1, k+1);
-									tablero[j][k].cambiaEstado("tocado");
-								}*/
 						}
-						//Como se que barco hay aqui? tocado (int x, int y)
 					}
 				} else throw new DotacionIncompletaException(nombre);
 			}else throw new CoordenadaNoValidaException(c.getX(), c.getY());

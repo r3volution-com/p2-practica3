@@ -4,14 +4,14 @@ import java.io.IOException;
 
 
 public class Juego {
-	/*public static void main (String args[]){
+	public static void main (String args[]){
 		Coordenada coors[] = new Coordenada[3];
 		coors[0]= new Coordenada(0, 0);
 		coors[1] = new Coordenada(3, 3);
 		coors[2] = new Coordenada(11, 11);
 		for (int i = 0; i < coors.length; i++) {
-			System.out.println(coors[i].getX()); //1 / 3 / 10
-			System.out.println(coors[i].getY()); //1 / 3 / 10
+			System.out.println(coors[i].getX()); //0 / 3 / 11
+			System.out.println(coors[i].getY()); //0 / 3 / 11
 			System.out.println(coors[i].cambiaEstado("agua")); //false
 			System.out.println(coors[i].cambiaEstado("cosa")); //false
 			System.out.println(coors[i].cambiaEstado("ocupado")); //true
@@ -24,15 +24,13 @@ public class Juego {
 		bar[1] = new Barco(1);
 		bar[2] = new Barco(6);
 		for (int i = 0; i < coors.length; i++) {
-			System.out.println(bar[i].setPosicion(coors[0], 0)); //true
+			System.out.println(bar[i].setPosicion(coors[1], 0)); //true
+			System.out.println(bar[i].setPosicion(coors[0], 3)); //false (fuera de limites)
 			System.out.println(bar[i].setPosicion(coors[0], 3)); //false (no cabe)
-			System.out.println(bar[i].setPosicion(coors[0], 0)+"\n"); //false (repe)
-			//System.out.println(bar[i].compruebaCoordenada(0, 0)); //true
-			//System.out.println(bar[i].compruebaCoordenada(1, 1)); //false
-			//System.out.println(bar[i].compruebaCoordenada(20, 20)+"\n"); //false
-			System.out.println(bar[i].tocado(0, 0)); //false
-			System.out.println(bar[i].tocado(1, 1)); //true
-			System.out.println(bar[i].tocado(20, 20)+"\n"); //false
+			System.out.println(bar[i].setPosicion(coors[1], 0)); //false (repe)
+			System.out.println(bar[i].tocado(1, 1)); //false (no existe)
+			System.out.println(bar[i].tocado(3, 3)); //true
+			System.out.println(bar[i].tocado(20, 20)); //false (fuera de limites)
 			System.out.println(bar[i].getTipo()); //lancha
 			System.out.println(bar[i].getEstado()); //hundido
 			System.out.println("\n");
@@ -40,12 +38,12 @@ public class Juego {
 		Jugador jug[] = new Jugador[2];
 		jug[0]= new Jugador("Mario");
 		jug[1] = new Jugador(null);
-		for (int i = 0; i < coors.length; i++) {
+		for (int i = 0; i < jug.length; i++) {
 			jug[i].muestraTablero();
 			System.out.println("\n");
 		}
-	}*/
-	public static void main (String args[]){
+	}
+	/*public static void main (String args[]){
 		if (args.length > 2){
 			FileReader entrada;
 			BufferedReader mibuf;
@@ -69,5 +67,5 @@ public class Juego {
 				ex.printStackTrace();
 			}
 		}
-	}
+	}*/
 }

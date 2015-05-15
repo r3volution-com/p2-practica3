@@ -27,7 +27,7 @@ public class Barco {
 		}
 	}
 	public boolean setPosicion(Coordenada c, int i){
-		if (c != null && i >= 0 && i < posiciones.length && posiciones[i] == null){
+		if (c != null && c.getX() >= 1 && c.getX() <= 10 && c.getY() >= 1 && c.getY() <= 10 && i >= 0 && i < posiciones.length && posiciones[i] == null){
 			posiciones[i] = c;
 			if (posiciones[i].getEstado().compareToIgnoreCase("ocupado") != 0){
 				//REvisar

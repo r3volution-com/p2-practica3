@@ -4,10 +4,6 @@ public class Coordenada {
 	private int y;
 	private String estado;
 	public Coordenada(int x, int y){
-		if (x<=0) x=1;
-		if (y<=0) y=1;
-		if (x>10) x=10;
-		if (y>10) y=10;
 		this.x=x;
 		this.y=y;
 		this.estado="agua";
