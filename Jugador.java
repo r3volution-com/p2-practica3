@@ -1,6 +1,6 @@
 
 public class Jugador {
-	private Coordenada[][] tablero = new Coordenada[9][9];
+	private Coordenada[][] tablero = new Coordenada[10][10];
 	private Barco[] naves = new Barco[10];
 	private String nombre;
 	public Jugador(String nombre){
@@ -66,16 +66,20 @@ public class Jugador {
 							} else throw new DotacionCompletaException("acorazado");
 						} else return false;
 						int l = 0;
+						//System.out.println(nombre+" esta intentando colocar en "+i.getX()+" "+i.getY()+" - "+f.getX()+" "+f.getY());
 						for (int j = 0; j<tablero.length;j++){
 							for (int k = 0; k < tablero[j].length; k++){
 								//Comprobamos que la posicion pertenece al barco y su estado es agua, si es asi cambia esa coordenada a ocupado.
+								//System.out.println(tablero[j][k].getY()+" == "+i.getY()+" "+tablero[j][k].getX()+" >= "+i.getX()+" && "+tablero[j][k].getX()+" <= "+f.getX());
 								if (tablero[j][k].getY() == i.getY() && (tablero[j][k].getX() >= i.getX() && tablero[j][k].getX() <= f.getX()) && tablero[j][k].getEstado().equalsIgnoreCase("agua") == true){
 									//tablero[j][k].cambiaEstado("ocupado");
+									//System.out.println(nombre+" "+tablero[j][k].getEstado());
 									naves[primeralibre].setPosicion(tablero[j][k], l);
 									l++;
 								}
 							}
 						}
+						//System.out.println("\n");
 						return true;
 					//Comprobamos que vaya en vertical (el final de Y sea mayor que el inicial y el mayor de X sea IGUAL al horizontal)
 					} else if ((f.getY() >= i.getY() && f.getX() == i.getX())){
@@ -96,7 +100,7 @@ public class Jugador {
 							if (c_destructores < 3) {
 								naves[primeralibre] = new Barco(coordenadasY+1);
 							} else throw new DotacionCompletaException("destructor");
-						} else if (coordenadasX == 2){
+						} else if (coordenadasY == 2){
 							if (c_cruceros < 2) {
 								naves[primeralibre] = new Barco(coordenadasY+1);
 							} else throw new DotacionCompletaException("crucero");
@@ -111,11 +115,13 @@ public class Jugador {
 								//Comprobamos que la posicion pertenece al barco y su estado es agua, si es asi cambia esa coordenada a ocupado.
 								if (tablero[j][k].getX() == i.getX() && (tablero[j][k].getY() >= i.getY() && tablero[j][k].getY() <= f.getY()) && tablero[j][k].getEstado().equalsIgnoreCase("agua") == true){
 									//tablero[j][k].cambiaEstado("ocupado");
+									//System.out.println(nombre+" "+tablero[j][k].getEstado());
 									naves[primeralibre].setPosicion(tablero[j][k], l);
 									l++;
 								}
 							}
 						}
+						//System.out.println("\n");
 						return true;
 					} else return false;
 				} return false;
@@ -126,6 +132,9 @@ public class Jugador {
 	public boolean esAtacado(Coordenada c) throws CoordenadaNoValidaException, DotacionIncompletaException, PartidaPerdidaException {
 		if (c != null){
 			boolean tdshundidos = true;
+			/*for (int i = 0; i< naves.length; i++){
+				System.out.println(naves[i].getTipo());
+			}*/
 			//Comprobamos i la coordenada esta dentro de los limitess
 			if ((c.getX() >= 1 && c.getX() <= 10) && (c.getY() >= 1 && c.getY() <= 10)){
 				if (naves[naves.length-1] != null){
@@ -164,6 +173,20 @@ public class Jugador {
 			}
 			System.out.print("\n");
 		}
+	}
+	public String muestraTablero2(){
+		String cadena = "";
+		for (int i = 0; i < tablero.length; i++) {
+			for (int j = 0; j < tablero[i].length; j++){
+				if (tablero[i][j] != null && tablero[i][j].getEstado() != null){
+					if (tablero[i][j].getEstado().compareToIgnoreCase("agua") == 0) cadena += "a ";
+					if (tablero[i][j].getEstado().compareToIgnoreCase("ocupado") == 0) cadena += "o ";
+					if (tablero[i][j].getEstado().compareToIgnoreCase("tocado") == 0) cadena += "t ";
+				}
+			}
+			cadena+="\n";
+		}
+		return cadena;
 	}
 	public Barco[] getNaves(){
 		return naves;

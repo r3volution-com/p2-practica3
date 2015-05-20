@@ -43,16 +43,17 @@ public class Barco {
 			for (int i = 0; i < posiciones.length; i++){
 				if (posiciones[i] != null){
 					if (posiciones[i].getX() == x && posiciones[i].getY() == y){
-						posiciones[i].cambiaEstado("tocado");
-						for (int j = 0; j < posiciones.length; j++){
-							if (posiciones[j] != null){
-								 if (posiciones[j].getEstado().compareToIgnoreCase("tocado") != 0) tocado = false;
-							} else tocado = false;
-						}
-						if (tocado){
-							this.estado = "hundido";
-						}
-						return true;
+						if (posiciones[i].cambiaEstado("tocado")) {
+							for (int j = 0; j < posiciones.length; j++){
+								if (posiciones[j] != null){
+									 if (posiciones[j].getEstado().compareToIgnoreCase("tocado") != 0) tocado = false;
+								} else tocado = false;
+							}
+							if (tocado){
+								this.estado = "hundido";
+							}
+							return true;
+						} else return false;
 					}
 				}
 			}

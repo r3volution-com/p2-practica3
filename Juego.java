@@ -1,10 +1,11 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 
 public class Juego {
-	public static void main (String args[]){
+	/*public static void main (String args[]){
 		Coordenada coors[] = new Coordenada[3];
 		coors[0]= new Coordenada(0, 0);
 		coors[1] = new Coordenada(3, 3);
@@ -42,30 +43,112 @@ public class Juego {
 			jug[i].muestraTablero();
 			System.out.println("\n");
 		}
+	}*/
+	private static Coordenada[] getCoordenadas(String linea) {
+		// indicamos el separador de campos : un espacio en blanco
+		String separador = "[ ]";
+		// segmentam o s
+		String[] elems = linea.split(separador);
+		// convertim o s a entero cada cadena
+		// contenida en elems
+		int f1 = Integer.parseInt(elems[0]);
+		int c1 = Integer.parseInt(elems[1]);
+		int f2 = Integer.parseInt(elems[2]);
+		int c2 = Integer.parseInt(elems[3]);
+		// con estos datos ya se pueden construir coordenad a s
+		Coordenada[] coors = new Coordenada[2];
+		coors[0] = new Coordenada(f1, c1);
+		coors[1] = new Coordenada(f2, c2);
+		return coors;
 	}
-	/*public static void main (String args[]){
-		if (args.length > 2){
+	private static Coordenada getAtaque(String linea) {
+		// indicamos el separador de campos : un espacio en blanco
+		String separador = "[ ]";
+		// segmentam o s
+		String[] elems = linea.split(separador);
+		// convertim o s a entero cada cadena
+		// contenida en elems
+		int f1 = Integer.parseInt(elems[0]);
+		int c1 = Integer.parseInt(elems[1]);
+		// con estos datos ya se pueden construir coordenad a s
+		Coordenada coors = new Coordenada(f1, c1);
+		return coors;
+	}
+	public static void main (String args[]){
+		if (args.length == 2){
 			FileReader entrada;
+			FileWriter salida;
 			BufferedReader mibuf;
-			String primerjugador, segundojugador, tipo;
+			String primerjugador, segundojugador, linea;
+			Jugador[] jugadores = new Jugador[2];
+			Coordenada[] coors;
+			Coordenada coor;
+			int jugadoractual = 0;
+			boolean jugando = true;
 			try{
 				entrada=new FileReader(args[0]);
+				salida=new FileWriter(args[1]);
 				mibuf=new BufferedReader(entrada);
 				primerjugador=mibuf.readLine();
+				jugadores[0] = new Jugador(primerjugador);
 				segundojugador=mibuf.readLine();
+				jugadores[1] = new Jugador(segundojugador);
 				if (mibuf.readLine().equals("barcos")){
-					while (!mibuf.readLine().equals("barcos")){
-						//Crear Barcos J1
+					try {
+						do {
+							linea = mibuf.readLine();
+							if (!linea.equals("barcos")){
+								coors = getCoordenadas(linea);
+								jugadores[0].situaBarco(coors[0], coors[1]);
+							}
+						} while (!linea.equals("barcos"));
+						do {
+							linea = mibuf.readLine();
+							if (!linea.equals("partida")){
+								coors = getCoordenadas(linea);
+								jugadores[1].situaBarco(coors[0], coors[1]);
+							}
+						} while (!linea.equals("partida"));
+						do {
+							linea = mibuf.readLine();
+							if (linea != null){
+								coor = getAtaque(linea);
+								if (!jugadores[jugadoractual].esAtacado(coor)){
+									if (jugadoractual == 0) jugadoractual = 1;
+									else jugadoractual = 0;
+								}
+							}
+						} while (linea != null && jugando == true);
+						if (jugando == true) {
+							salida.write(jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
+						}
+					} catch (CoordenadaNoValidaException e) {
+						salida.write(e.getClass().getName()+": "+e.getMessage());
+						e.printStackTrace();
+						if (jugadoractual == 0) jugadoractual = 1;
+						else jugadoractual = 0;
+					} catch (DotacionCompletaException e) {
+						salida.write(e.getClass().getName()+": "+e.getMessage());
+						e.printStackTrace();
+					} catch (CoordenadaOcupadaException e) {
+						salida.write(e.getClass().getName()+": "+e.getMessage());
+						e.printStackTrace();
+					} catch (DotacionIncompletaException e) {
+						salida.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
+						e.printStackTrace();
+						jugando = false;
+					} catch (PartidaPerdidaException e) {
+						salida.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
+						e.printStackTrace();
+						jugando = false;
+					} finally{
+						entrada.close();
+						salida.close();
 					}
-					while (!mibuf.readLine().equals("partida")){
-						//Crear Barcos J2
-					}
-				} else { 
-					//No esta correcto
 				}
 			}catch(IOException ex){
 				ex.printStackTrace();
 			}
-		}
-	}*/
+		} else System.out.println("Debes pasarle 2 parametros");
+	}
 }
