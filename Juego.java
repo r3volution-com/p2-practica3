@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -78,7 +79,8 @@ public class Juego {
 		if (args.length == 2){
 			FileReader entrada;
 			FileWriter salida;
-			BufferedReader mibuf;
+			BufferedReader ebuf;
+			BufferedWriter sbuf;
 			String primerjugador, segundojugador, linea;
 			Jugador[] jugadores = new Jugador[2];
 			Coordenada[] coors;
@@ -88,67 +90,93 @@ public class Juego {
 			try{
 				entrada=new FileReader(args[0]);
 				salida=new FileWriter(args[1]);
-				mibuf=new BufferedReader(entrada);
-				primerjugador=mibuf.readLine();
+				ebuf=new BufferedReader(entrada);
+				sbuf=new BufferedWriter(salida);
+				primerjugador=ebuf.readLine();
 				jugadores[0] = new Jugador(primerjugador);
-				segundojugador=mibuf.readLine();
+				segundojugador=ebuf.readLine();
 				jugadores[1] = new Jugador(segundojugador);
-				if (mibuf.readLine().equals("barcos")){
-					try {
-						do {
-							linea = mibuf.readLine();
-							if (!linea.equals("barcos")){
-								coors = getCoordenadas(linea);
+				if (ebuf.readLine().equals("barcos")){
+					do {
+						linea = ebuf.readLine();
+						if (!linea.equals("barcos")){
+							coors = getCoordenadas(linea);
+							try {
 								jugadores[0].situaBarco(coors[0], coors[1]);
+							} catch (CoordenadaNoValidaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
+							} catch (DotacionCompletaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
+							} catch (CoordenadaOcupadaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
 							}
-						} while (!linea.equals("barcos"));
-						do {
-							linea = mibuf.readLine();
-							if (!linea.equals("partida")){
-								coors = getCoordenadas(linea);
+						}
+					} while (!linea.equals("barcos"));
+					do {
+						linea = ebuf.readLine();
+						if (!linea.equals("partida")){
+							coors = getCoordenadas(linea);
+							try {
 								jugadores[1].situaBarco(coors[0], coors[1]);
+							} catch (CoordenadaNoValidaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
+							} catch (DotacionCompletaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
+							} catch (CoordenadaOcupadaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
 							}
-						} while (!linea.equals("partida"));
-						do {
-							linea = mibuf.readLine();
-							if (linea != null){
-								coor = getAtaque(linea);
+						}
+					} while (!linea.equals("partida"));
+					do {
+						linea = ebuf.readLine();
+						if (linea != null){
+							coor = getAtaque(linea);
+							try {
 								if (!jugadores[jugadoractual].esAtacado(coor)){
 									if (jugadoractual == 0) jugadoractual = 1;
 									else jugadoractual = 0;
 								}
+							} catch (CoordenadaNoValidaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n");
+								e.printStackTrace();
+								//if (jugadoractual == 0) jugadoractual = 1;
+								//else jugadoractual = 0;
+							} catch (DotacionIncompletaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2()+"\n");
+								e.printStackTrace();
+								jugando = false;
+								if (ebuf != null) ebuf.close();
+								if (sbuf != null) sbuf.close();
+								if (entrada != null) entrada.close();
+								if (salida != null) salida.close();
+							} catch (PartidaPerdidaException e){
+								sbuf.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2()+"\n");
+								e.printStackTrace();
+								jugando = false;
+								if (ebuf != null) ebuf.close();
+								if (sbuf != null) sbuf.close();
+								if (entrada != null) entrada.close();
+								if (salida != null) salida.close();
 							}
-						} while (linea != null && jugando == true);
-						if (jugando == true) {
-							salida.write(jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
 						}
-					} catch (CoordenadaNoValidaException e) {
-						salida.write(e.getClass().getName()+": "+e.getMessage());
-						e.printStackTrace();
-						if (jugadoractual == 0) jugadoractual = 1;
-						else jugadoractual = 0;
-					} catch (DotacionCompletaException e) {
-						salida.write(e.getClass().getName()+": "+e.getMessage());
-						e.printStackTrace();
-					} catch (CoordenadaOcupadaException e) {
-						salida.write(e.getClass().getName()+": "+e.getMessage());
-						e.printStackTrace();
-					} catch (DotacionIncompletaException e) {
-						salida.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
-						e.printStackTrace();
-						jugando = false;
-					} catch (PartidaPerdidaException e) {
-						salida.write(e.getClass().getName()+": "+e.getMessage()+"\n"+jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
-						e.printStackTrace();
-						jugando = false;
-					} finally{
-						entrada.close();
-						salida.close();
+					} while (linea != null && jugando == true);
+					if (jugando == true) {
+						sbuf.write(jugadores[0].muestraTablero2()+"\n"+jugadores[1].muestraTablero2());
+						if (ebuf != null) ebuf.close();
+						if (sbuf != null) sbuf.close();
+						if (entrada != null) entrada.close();
+						if (salida != null) salida.close();
 					}
 				}
 			}catch(IOException ex){
 				ex.printStackTrace();
-			}
+			} 
 		} else System.out.println("Debes pasarle 2 parametros");
 	}
 }

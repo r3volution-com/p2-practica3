@@ -51,6 +51,7 @@ public class Barco {
 							}
 							if (tocado){
 								this.estado = "hundido";
+								System.out.println("EJEJEJ");
 							}
 							return true;
 						} else return false;
